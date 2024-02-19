@@ -6,13 +6,15 @@ import * as Yup from 'yup';
 function App() {
   const getValidationSchema = () => {
     return Yup.object({
-      name: Yup.string().required('Enter Name').min(2).matches(/^[A-Za-z]+$/, 'Only letters are allowed'),
-      MiddleName: Yup.string().required('Enter Middle Name').min(2).matches(/^[A-Za-z]+$/, 'Only letters are allowed'),
-      LastName: Yup.string().required('Enter Last Name').min(2).matches(/^[A-Za-z]+$/, 'Only letters are allowed'),
-      email: Yup.string().required('Enter email').email('Invalid email format'),
-      password: Yup.string().min(4).max(10).required('Enter password'),
-      cpassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords do not match').required('Confirm password'),
-      select: Yup.string().required('Select a City option'),
+      name: Yup.string().required('Name is required').min(2).matches(/^[A-Za-z]+$/, 'Only letters are allowed'),
+      MiddleName: Yup.string().required('Middle Name is required').min(2).matches(/^[A-Za-z]+$/, 'Only letters are allowed'),
+      LastName: Yup.string().required('Last Name is required').min(2).matches(/^[A-Za-z]+$/, 'Only letters are allowed'),
+      email: Yup.string().required('Email is required').email('Invalid email format'),
+      password: Yup.string().min(4).max(10).required('Enter password is required'),
+      cpassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords do not match').required('Confirm password is required'),
+      select: Yup.string().required('City is required'),
+      state: Yup.string().required('State is required'),
+      gender: Yup.string().required('Gender is required'),
     });
   };
 
@@ -24,6 +26,8 @@ function App() {
     MiddleName:'',
     LastName:'',
     select : '',
+    state:'',
+    gender: '',
   }
 
   let { handleSubmit, handleChange, handleBlur, values, touched, errors } = useFormik({
@@ -35,6 +39,7 @@ function App() {
   }, [])
 
   let cities = ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Bhavnagar', 'Jamnagar', 'Junagadh', 'Gandhinagar', 'Anand', 'Bharuch'];
+  let states = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Goa","Gujarat","Haryana","Jharkhand","Karnataka","Kerala"]
   return (
     <Container>
       <Form onSubmit={handleSubmit}>
@@ -86,7 +91,7 @@ function App() {
         <Row>
           <Col>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="city">Confirm Password</Form.Label>
+              <Form.Label htmlFor="city">City</Form.Label>
               <Form.Control as="select" placeholder="Enter Select" id="select" name="select" onChange={handleChange} onBlur={handleBlur} value={values.select}>
                 <option value='' label='Select City'></option>
                 {cities.map((city) => (
@@ -94,6 +99,28 @@ function App() {
                 ))}
               </Form.Control>
               <div className='errorLine'>{touched.select && errors.select && <div className="error">{errors.select}</div>}</div>
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="state">state</Form.Label>
+              <Form.Control as="select" placeholder="Enter state" id="state" name="state" onChange={handleChange} onBlur={handleBlur} value={values.select}>
+                <option value='' label='Select state'></option>
+                {states.map((state) => (
+                  <option key={state} value={state} label={state} />
+                ))}
+              </Form.Control>
+              <div className='errorLine'>{touched.state && errors.state && <div className="error">{errors.state}</div>}</div>
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="state">Gender</Form.Label>
+              <div className="d-flex gap-3">
+              <Form.Check  label="Male" type='radio' name="gender" value='male' onChange={handleChange} onBlur={handleBlur} />
+              <Form.Check  label="Female" type='radio' name="gender" value='female' onChange={handleChange} onBlur={handleBlur} />
+              </div>
+              <div className='errorLine'>{touched.gender && errors.gender && <div className="error">{errors.gender}</div>}</div>
             </Form.Group>
           </Col>
         </Row>
