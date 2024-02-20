@@ -17,6 +17,10 @@ function App() {
       gender: Yup.string().required('Gender is required'),
       birthdate: Yup.date().required('Birth Date is required').max(new Date(), 'Birth Date must be in the past'),
       number: Yup.string().matches(/^(\+91-?)?[6789]\d{9}$/,'Number Format is Not Valid').required('Number is required').max(10),
+      streetNum: Yup.string().required('Street Number is required').max(10),
+      AddressLine: Yup.string().required('Address Line is required'),
+      pincode:Yup.string().matches(/^[1-9][0-9]{5}$/,'Pincode is Invalid').required('Pincode is Required'),
+      hobbies: Yup.array().min(1, 'Select at least one hobby'),
     });
   };
 
@@ -32,6 +36,10 @@ function App() {
     gender: '',
     birthdate: '',
     number: '',
+    streetNum:'',
+    AddressLine:'',
+    pincode:'',
+    hobbies: [],
   }
 
   let { handleSubmit, handleChange, handleBlur, values, touched, errors } = useFormik({
@@ -43,7 +51,8 @@ function App() {
   }, [])
 
   let cities = ['Ahmadabad', 'Surat', 'Vadodara', 'Rajkot', 'Bhavnagar', 'Jamnagar', 'Junagadh', 'Gandhinagar', 'Anand', 'Bharuch'];
-  let states = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Goa","Gujarat","Haryana","Jharkhand","Karnataka","Kerala"]
+  let states = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Goa","Gujarat","Haryana","Jharkhand","Karnataka","Kerala"];
+  let hobbiesList = ['Reading', 'Gaming', 'Sports', 'Music', 'Cooking'];
   return (
     <Container className='bg-dark text-white py-5' fluid>
       <Form onSubmit={handleSubmit} data-bs-theme="dark" >
@@ -95,6 +104,56 @@ function App() {
         <Row>
           <Col md>
             <Form.Group className="mb-3">
+              <Form.Label htmlFor="birthdate">Birthdate</Form.Label>
+              <Form.Control type="date" id="birthdate" name="birthdate" onChange={handleChange} onBlur={handleBlur} value={values.birthdate} />
+              <div className='errorLine'>{touched.birthdate && errors.birthdate && <div className="error">{errors.birthdate}</div>}</div>
+            </Form.Group>
+          </Col>
+          <Col md>
+            <Form.Group className='mb-3'>
+              <Form.Label htmlFor='hobbies'>Hobbies</Form.Label>
+              <div className="d-flex gap-1 flex-wrap">
+              {hobbiesList.map((hobby) => (
+                <Form.Check key={hobby} type="checkbox" id={hobby} label={hobby} name="hobbies" value={hobby} checked={values.hobbies.includes(hobby)} onChange={handleChange} />
+              ))}
+            </div>
+            <div className='errorLine'>{touched.hobbies && errors.hobbies && <div className="error">{errors.hobbies}</div>}</div>
+            </Form.Group>
+          </Col>
+          <Col md>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="number">Mobile Number</Form.Label>
+              <Form.Control type="text" id="number" name="number" placeholder='Enter Mobile Number' onChange={handleChange} onBlur={handleBlur} value={values.number} />
+              <div className='errorLine'>{touched.number && errors.number && <div className="error">{errors.number}</div>}</div>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col md>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="streetNum">Street Address</Form.Label>
+              <Form.Control type="text" id="streetNum" name="streetNum" placeholder='Enter Street Address' onChange={handleChange} onBlur={handleBlur} value={values.streetNum} />
+              <div className='errorLine'>{touched.streetNum && errors.streetNum && <div className="error">{errors.streetNum}</div>}</div>
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="AddressLine">Address Line</Form.Label>
+              <Form.Control type="text" id="AddressLine" name="AddressLine" placeholder='Enter Street Address' onChange={handleChange} onBlur={handleBlur} value={values.AddressLine} />
+              <div className='errorLine'>{touched.AddressLine && errors.AddressLine && <div className="error">{errors.AddressLine}</div>}</div>
+            </Form.Group>
+          </Col>
+          <Col md>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="pincode">Pincode</Form.Label>
+              <Form.Control type="number" id="pincode" name="pincode" placeholder='Enter Pincode ' onChange={handleChange} onBlur={handleBlur} value={values.pincode} />
+              <div className='errorLine'>{touched.pincode && errors.pincode && <div className="error">{errors.pincode}</div>}</div>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col md>
+            <Form.Group className="mb-3">
               <Form.Label htmlFor="city">City</Form.Label>
               <Form.Control as="select" placeholder="Enter Select" id="select" name="select" onChange={handleChange} onBlur={handleBlur} value={values.select}>
                 <option value='' label='Select City'></option>
@@ -125,22 +184,6 @@ function App() {
               <Form.Check  label="Female" type='radio' name="gender" value='female' onChange={handleChange} onBlur={handleBlur} />
               </div>
               <div className='errorLine'>{touched.gender && errors.gender && <div className="error">{errors.gender}</div>}</div>
-            </Form.Group>
-          </Col>
-        </Row>
-        <Row>
-          <Col md>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="birthdate">Birthdate</Form.Label>
-              <Form.Control type="date" id="birthdate" name="birthdate" onChange={handleChange} onBlur={handleBlur} value={values.birthdate} />
-              <div className='errorLine'>{touched.birthdate && errors.birthdate && <div className="error">{errors.birthdate}</div>}</div>
-            </Form.Group>
-          </Col>
-          <Col md>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="birthdate">Mobile Number</Form.Label>
-              <Form.Control type="text" id="number" name="number" placeholder='Enter Mobile Number' onChange={handleChange} onBlur={handleBlur} value={values.number} />
-              <div className='errorLine'>{touched.number && errors.number && <div className="error">{errors.number}</div>}</div>
             </Form.Group>
           </Col>
         </Row>
